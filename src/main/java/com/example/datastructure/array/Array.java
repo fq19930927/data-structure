@@ -1,5 +1,7 @@
 package com.example.datastructure.array;
 
+import java.util.Objects;
+
 /**
  * @author fuqiang
  * @version Array, v0.1 2018/11/8 21:13
@@ -46,11 +48,13 @@ public class Array<E> {
 
     // 在index索引的位置插入一个新元素e
     public void add(int index, E e) {
-        if(size == data.length)
-            throw new IllegalArgumentException("Add failed. Array is full.");
 
         if(index < 0 || index > size)
             throw new IllegalArgumentException("Add failed. Require index >= 0 and index <= size.");
+
+        if(size == data.length)
+            //扩容
+            reSize(getCapacity() * 2);
 
         for(int i = size - 1; i >= index ; i --)
             data[i + 1] = data[i];
@@ -101,6 +105,10 @@ public class Array<E> {
         for(int i = index + 1 ; i < size ; i ++)
             data[i - 1] = data[i];
         size --;
+        data[size] = null; // loitering objects != memory leak
+
+        if(size == data.length / 2)
+            reSize(data.length / 2);
         return ret;
     }
 
@@ -119,6 +127,15 @@ public class Array<E> {
         int index = find(e);
         if(index != -1)
             remove(index);
+    }
+
+    // 数组2倍扩容
+    private void reSize(int newCapatity) {
+        E[] newData = (E[]) new Object[newCapatity];
+        for (int i = 0; i < size; i++) {
+            newData[i] = data[i];
+        }
+        data = newData;
     }
 
     @Override
