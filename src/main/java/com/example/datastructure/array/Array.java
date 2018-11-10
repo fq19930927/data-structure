@@ -107,9 +107,17 @@ public class Array<E> {
         size --;
         data[size] = null; // loitering objects != memory leak
 
-        if(size == data.length / 2)
+        if(size == data.length / 4 && data.length / 2 != 0)
             reSize(data.length / 2);
         return ret;
+    }
+
+    public E getLast(){
+        return get(size - 1);
+    }
+
+    public E getFirst(){
+        return get(0);
     }
 
     // 从数组中删除第一个元素, 返回删除的元素
